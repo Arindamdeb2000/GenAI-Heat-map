@@ -1,6 +1,8 @@
 // Sample data for heatmap
 const heatmapData = [
-  { country: 'US', value: 5 },
+  { company: 'A2I.ai', headquarters: 'Bengaluru', sectors: 'Retail, healthcare, education', value: 5 },
+  { company: 'Able.ai', headquarters: 'Mumbai', sectors: 'Marketing, customer service, sales', value: 3 },
+  { company: 'Artificial Foundry', headquarters: 'Bengaluru', sectors: 'Media and entertainment, e-commerce, gaming', value: 4 },
   // Add more data points as needed
 ];
 
@@ -16,13 +18,20 @@ function createHeatmap(data) {
 
   // Your heatmap rendering code using D3.js goes here
 
-  // Example: Create a rectangle representing the US with color based on the value
-  svg.append('rect')
-    .attr('x', 50)
+  // Example: Create rectangles for each data point
+  const rectangles = svg.selectAll('rect')
+    .data(data)
+    .enter()
+    .append('rect')
+    .attr('x', (d, i) => i * (width / data.length))
     .attr('y', 50)
-    .attr('width', 100)
+    .attr('width', width / data.length)
     .attr('height', 50)
-    .attr('fill', getColor(heatmapData[0].value));
+    .attr('fill', d => getColor(d.value));
+
+  // Example: Add tooltips for company details
+  rectangles.append('title')
+    .text(d => `${d.company}\nHeadquarters: ${d.headquarters}\nSectors: ${d.sectors}`);
 }
 
 // Function to get color based on value (customize as needed)
